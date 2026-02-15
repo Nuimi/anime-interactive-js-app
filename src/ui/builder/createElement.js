@@ -1,0 +1,30 @@
+export function createElement(tag, options = {}, children = [])
+{
+    const element = document.createElement(tag);
+
+    if (options.className)
+    {
+        element.className = options.className;
+    }
+
+    for (const [key, value] of Object.entries(options))
+    {
+        if (key !== "className")
+        {
+            element.setAttribute(key, value);
+        }
+    }
+
+    children.forEach((child) =>
+        {
+            if (typeof child === "string" || typeof child === "number")
+            {
+                element.appendChild(document.createTextNode(child));
+            } else if (child instanceof Node) {
+                element.appendChild(child);
+            }
+        }
+    );
+
+    return element;
+}

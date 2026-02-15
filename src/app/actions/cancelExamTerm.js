@@ -1,0 +1,33 @@
+export async function cancelExamTerm(store, api, payload) {
+  const { examId } = payload;
+  //const state = store.getState();
+
+  store.setState((state) => {
+    return {
+      ...state,
+      ui: { ...state.ui, status: "LOADING", errorMessage: null },
+    };
+  });
+
+  try {
+    await api.cancelExamTerm(examId);
+    // volání neskončilo chybou, zkouškový termín lze zrušit
+    store.setState((state) => {
+      return {
+        ...state,
+        exams: state.exams.filter((t) => t.id !== examId),
+        ui: { ...state.ui, status: "READY", errorMessage: null },
+      };
+    });
+  } catch (error) {
+    store.setState((state) => {
+      return {
+        ...state,
+        ui: {
+          status: "ERROR",
+          errorMessage: error.message ?? "FE: Nelze zrušit zkouškový termín",
+        },
+      };
+    });
+  }
+}
