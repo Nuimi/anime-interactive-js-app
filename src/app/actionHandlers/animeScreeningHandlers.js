@@ -1,9 +1,9 @@
 // src/app/actionHandlers/createExamTermHandlers.js
 
-export function createExamTermHandlers(dispatch, viewState) {
+export function createAnimeScreeningHandlers(dispatch, viewState) {
   switch (viewState.type) {
     case 'ANIME_SCREENING':
-      return examTermListHandlers(dispatch, viewState);
+      return animeScreeningHandlers(dispatch, viewState);
 
     case 'ANIME_DETAIL':
       return examTermDetailHandlers(dispatch, viewState);
@@ -16,7 +16,7 @@ export function createExamTermHandlers(dispatch, viewState) {
   }
 }
 
-function examTermListHandlers(dispatch, viewState) {
+function animeScreeningHandlers(dispatch, viewState) {
   const handlers = {};
 
   handlers.enterDetail = (examId) =>
@@ -89,7 +89,8 @@ function examTermDetailHandlers(dispatch, viewState) {
   }
 
   // navigační akce, bez podmínek, na základě kontextu
-  handlers.backToList = () => dispatch({ type: 'ENTER_ANIME_SCREENING' });
+  handlers.backToList = () =>
+      dispatch({ type: 'ENTER_ANIME_SCREENING' });
 
   handlers.enterAdministration = () =>
     dispatch({

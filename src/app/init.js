@@ -27,7 +27,7 @@ console.log('[router] url ToAction -> ', initialAction);
 dispatch(initialAction);
 
 // naslouchání změnám v řádku s adresou
-window.addEventListener('popstate', () =>
+window.addEventListener('hashchange', () =>
   {
     const action = urlToAction(window.location.href);
     console.log('[router] url ToAction -> ', action);
