@@ -60,7 +60,8 @@ function renderActions(handlers)
   return div;
 }
 
-function button( onClick) {
+function button( onClick)
+{
   const btn = createButton('button--primary', 'Detail');
   btn.addEventListener('click', onClick);
   return createDiv('text-center', [btn]);

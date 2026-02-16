@@ -1,14 +1,34 @@
-// src/ui/render.js
-
 import { selectViewState } from '../infra/store/selectors.js';
 import { createAnimeScreeningHandlers } from '../app/actionHandlers/animeScreeningHandlers.js';
-
 import { LoadingView } from './views/LoadingView.js';
 import { ErrorView } from './views/ErrorView.js';
 import { AnimeListView } from './views/AnimeListView.js';
 import { AnimeScreeningDetailView } from './views/AnimeScreeningDetailView.js';
 import { ExamTermAdministrationView } from './views/ExamTermAdministrationView.js';
 
+/*
+ ** viewState má tvar
+ ** {
+ **   type: 'LOADING' | 'ERROR' | 'EXAM_TERM_LIST' | 'EXAM_TERM_DETAIL' | 'EXAM_TERM_ADMINISTRATION',
+ **   message?: string ,
+ **   exam?: ExamTerm,
+ **   exams?: ExamTerm[],
+ **   capabilities?: {
+ **     canEnterDetail: boolean,
+ **     canEnterAdministration: boolean,
+ **     canBackToList: boolean,
+ **     canCreateExam: boolean,
+ **     canRegister: boolean,
+ **     canUnregister: boolean,
+ **     canPublish: boolean,
+ **     canUnpublish: boolean,
+ **     canCancel: boolean,
+ **     canDelete: boolean,
+ **     canUpdateCapacity: boolean,
+ **     canUpdate: boolean
+ **   },
+ ** }
+ */
 export function render(root, state, dispatch) {
   root.replaceChildren();
 
@@ -32,11 +52,22 @@ export function render(root, state, dispatch) {
       break;
 
     case 'ANIME_DETAIL':
-      view = AnimeScreeningDetailView({ viewState, handlers });
+      if (!viewState.anime)
+      {
+        view = ErrorView({ message: 'Anime screening was not found.' });
+      } else {
+        view = AnimeScreeningDetailView({ viewState, handlers });
+      }
       break;
 
     case 'EXAM_TERM_ADMINISTRATION':
-      view = ExamTermAdministrationView({ viewState, handlers });
+
+      if (!viewState.anime)
+      {
+        view = ErrorView({ message: 'Anime screening was not found.' });
+      } else {
+        view = ExamTermAdministrationView({ viewState, handlers });
+      }
       break;
 
     default:
@@ -44,4 +75,14 @@ export function render(root, state, dispatch) {
   }
 
   root.appendChild(view);
+
+  const { notification } = state.ui;
+
+  if (notification)
+  {
+    const notificationElement = document.createElement('div');
+    notificationElement.textContent = notification.message;
+    notificationElement.classList.add('notification');
+    root.appendChild(notificationElement);
+  }
 }

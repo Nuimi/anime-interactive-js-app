@@ -1,19 +1,22 @@
-export function ErrorView({ message, handlers }) {
-  console.log('handlers in ErrorView:', handlers);
-  const root = document.createElement('div');
 
-  const h1 = document.createElement('h1');
-  h1.textContent = 'Chyba';
+import { createTitle } from "../builder/components/title.js";
+import { createText } from "../builder/components/text.js";
+import { createDiv } from "../builder/components/div.js";
+import { createButton } from "../builder/components/button.js";
 
-  const p = document.createElement('p');
-  p.textContent = message;
-
-  const button = document.createElement('button');
-  button.textContent = 'Pokračovat';
-  button.addEventListener('click', () => handlers.onContinue());
-
-  root.appendChild(h1);
-  root.appendChild(p);
-  root.appendChild(button);
-  return root;
+export function ErrorView({ message, handlers })
+{
+  const { onContinue } = handlers;
+  return createDiv('', [
+      createTitle(1, 'Error'),
+      createText( message),
+      button(onContinue)
+    ]
+  );
+}
+function button(onContinue)
+{
+  const btn = createButton('button--primary', 'Continue');
+  btn.addEventListener('click', onContinue);
+  return btn;
 }

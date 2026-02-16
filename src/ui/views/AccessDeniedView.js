@@ -1,9 +1,6 @@
-export function AccessDeniedView() {
-  const root = document.createElement("div");
-
-  const h1 = document.createElement("h1");
-  h1.textContent = "Přístup odepřen...";
-
-  root.appendChild(h1);
-  return root;
+import { createTitle } from "../builder/components/title.js";
+import { createDiv } from "../builder/components/div.js";
+export function AccessDeniedView()
+{
+  return createDiv('', [createTitle(1,'Access denied')]);
 }

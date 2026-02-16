@@ -1,82 +1,95 @@
 // src/ui/views/ExamTermAdministrationView.js
 
 export function ExamTermAdministrationView({ viewState, handlers }) {
-  const { exam, canPublish, canUnpublish, canCancel, canEdit } = viewState;
+  const { exam, capabilities } = viewState;
 
-  const root = document.createElement("section");
-  root.className = "exam-term-administration";
+  const container = document.createElement('div');
+
+  const title = document.createElement('h2');
+  title.textContent = `Administrace zkouškového termínu: ${exam.name ?? exam.id}`;
+  container.appendChild(title);
+
+  const { canUpdateCapacity, canUpdate, canCancel, canDelete, canBackToList } = capabilities;
+  const { onUpdateCapacity, onUpdate, onCancel, onDelete, onBackToList } = handlers;
+
+  /**
+   * Zpět na seznam
+   */
+
+  if (canBackToList && onBackToList) {
+    const btn = document.createElement('button');
+    btn.textContent = 'Zpět na seznam';
+    btn.addEventListener('click', onBackToList);
+    container.appendChild(btn);
+  }
 
   if (!exam) {
-    root.textContent = "Zkouškový termín nebyl nalezen.";
-    return root;
+    const msg = document.createElement('p');
+    msg.textContent = 'Termín nebyl nalezen';
+    container.appendChild(msg);
+    return container;
   }
 
-  // === Nadpis ===
-  const heading = document.createElement("h2");
-  heading.textContent = `Správa termínu: ${exam.title}`;
-  root.appendChild(heading);
+  /*
+   * aktualizace kapacity
+   */
+  let capacityInput = null;
 
-  // === Základní informace ===
-  const info = document.createElement("div");
-  info.className = "exam-info";
+  if (canUpdateCapacity && onUpdateCapacity) {
+    capacityInput = document.createElement('input');
+    capacityInput.type = 'number';
+    capacityInput.value = exam.capacity;
+    capacityInput.min = '0';
 
-  info.appendChild(createInfoRow("Stav", exam.status));
-  info.appendChild(createInfoRow("Kapacita", exam.capacity));
-  info.appendChild(createInfoRow("Přihlášeno", exam.registeredCount));
+    const btn = document.createElement('button');
+    btn.textContent = 'Upravit kapacitu';
+    btn.addEventListener('click', () => onUpdateCapacity(Number(capacityInput.value)));
 
-  root.appendChild(info);
-
-  // === Akční tlačítka ===
-  const actions = document.createElement("div");
-  actions.className = "exam-actions";
-
-  if (canPublish) {
-    actions.appendChild(createButton("Publikovat", handlers.publish));
+    container.appendChild(capacityInput);
+    container.appendChild(btn);
   }
 
-  if (canUnpublish) {
-    actions.appendChild(createButton("Zneveřejnit", handlers.unpublish));
+  /**
+   * editace dalších údajů
+   */
+  if (canUpdate && onUpdate) {
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = exam.name ?? '';
+
+    const dateInput = document.createElement('input');
+    dateInput.type = 'datetime-local';
+    dateInput.value = exam.date ?? '';
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Uložit';
+    btn.addEventListener('click', () => onUpdate({ name: nameInput.value, date: dateInput.value }));
+
+    container.appendChild(nameInput);
+    container.appendChild(dateInput);
+    container.appendChild(btn);
   }
 
-  if (canEdit) {
-    actions.appendChild(createButton("Upravit", handlers.edit));
+  /**
+   * Cancel
+   */
+
+  if (canCancel && onCancel) {
+    const btn = document.createElement('button');
+    btn.textContent = 'Zrušit';
+    btn.addEventListener('click', onCancel);
+    container.appendChild(btn);
   }
 
-  if (canCancel) {
-    actions.appendChild(
-      createButton("Zrušit termín", handlers.cancel, "danger"),
-    );
+  /**
+   * Delete
+   */
+  if (canDelete && onDelete) {
+    const btn = document.createElement('button');
+    btn.textContent = 'Smazat';
+    btn.addEventListener('click', onDelete);
+    container.appendChild(btn);
   }
 
-  root.appendChild(actions);
-
-  return root;
-}
-
-/* ===== Pomocné funkce ===== */
-
-function createInfoRow(label, value) {
-  const row = document.createElement("div");
-  row.className = "info-row";
-
-  const key = document.createElement("span");
-  key.className = "info-label";
-  key.textContent = `${label}: `;
-
-  const val = document.createElement("strong");
-  val.textContent = value;
-
-  row.appendChild(key);
-  row.appendChild(val);
-
-  return row;
-}
-
-function createButton(label, onClick, variant = "default") {
-  const button = document.createElement("button");
-  button.textContent = label;
-  button.type = "button";
-  button.className = `btn btn-${variant}`;
-  button.addEventListener("click", onClick);
-  return button;
+  return container;
 }
