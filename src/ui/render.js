@@ -6,13 +6,15 @@ import { AnimeListView } from './views/AnimeListView.js';
 import { AnimeScreeningDetailView } from './views/AnimeScreeningDetailView.js';
 import { ExamTermAdministrationView } from './views/ExamTermAdministrationView.js';
 
+import * as CONST from '../constants.js';
+
 /*
  ** viewState má tvar
  ** {
  **   type: 'LOADING' | 'ERROR' | 'EXAM_TERM_LIST' | 'EXAM_TERM_DETAIL' | 'EXAM_TERM_ADMINISTRATION',
  **   message?: string ,
  **   exam?: ExamTerm,
- **   exams?: ExamTerm[],
+ **   animeScreening?: ExamTerm[],
  **   capabilities?: {
  **     canEnterDetail: boolean,
  **     canEnterAdministration: boolean,
@@ -47,11 +49,11 @@ export function render(root, state, dispatch) {
       view = ErrorView({ message: viewState.message });
       break;
 
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       view = AnimeListView({ viewState, handlers });
       break;
 
-    case 'ANIME_DETAIL':
+    case CONST.DETAIL:
       if (!viewState.anime)
       {
         view = ErrorView({ message: 'Anime screening was not found.' });

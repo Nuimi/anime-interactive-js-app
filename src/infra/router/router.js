@@ -1,4 +1,4 @@
-// src/infra/router/router.js
+import * as CONST from '../../constants.js';
 
 // --------------------------------------------------
 // Router pracuje s LOGICKOU CESTOU aplikace,
@@ -23,7 +23,7 @@ export function parsePath(path)
   if (parts.length === 1 && parts[0] === 'anime-screening')
   {
     return {
-      route: 'ANIME_SCREENING',
+      route: CONST.ANIME_LIST,
     };
   }
 
@@ -55,7 +55,7 @@ export function routeToAction(parsed)
 {
   switch (parsed.route)
   {
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       return {
         type: 'ENTER_ANIME_SCREENING',
       };

@@ -1,11 +1,13 @@
+import * as CONST from '../../constants.js';
+
 export function createHandlers(dispatch, viewState)
 {
   switch (viewState.type)
   {
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       return animeScreeningHandlers(dispatch, viewState);
 
-    case 'ANIME_DETAIL':
+    case CONST.DETAIL:
       return animeDetailHandlers(dispatch, viewState);
 
     case 'EXAM_TERM_ADMINISTRATION':

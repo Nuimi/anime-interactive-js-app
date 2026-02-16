@@ -21,11 +21,11 @@ export async function registerForExam(store, api, payload) {
       ...state,
       ui: { ...state.ui, status: "READY", errorMessage: null },
       registrations: [...state.registrations, registration],
-      exams: state.exams.map((e) => (e.id === exam.id ? exam : e)),
+      animeScreening: state.animeScreening.map((e) => (e.id === exam.id ? exam : e)),
     }));
     console.log(
       "Stav aktualizovaný po odpovědi backendu, zkoušky:",
-      store.getState().exams,
+      store.getState().animeScreening,
     );
   } catch (error) {
     store.setState((state) => ({

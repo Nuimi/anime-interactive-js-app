@@ -16,7 +16,7 @@ READY -> ERROR
 export function createInitialState() {
   return {
     // ====== domain data =======
-    exams: [],
+    animeScreening: [],
     registrations: [],
     evaluations: [],
 

@@ -1,18 +1,17 @@
-// src/infra/store/selectors.js
-// předpokládáme, že selectViewState je jediné místo rozhodování o stavo-pohledu aplikace
+import * as CONST from '../../constants.js';
 
 export function selectRegistrations(state) {
   return state.registrations ?? [];
 }
 
 export function selectExams(state) {
-  return state.exams ?? [];
+  return state.animeScreening ?? [];
 }
 
 export function selectExamById(state) {
   const animeId = state.ui.selectedanimeId;
   if (!animeId) return null;
-  return state.exams.find((e) => e.id === animeId) ?? null;
+  return state.animeScreening.find((e) => e.id === animeId) ?? null;
 }
 
 export function selectCurrentRegistration(state) {
@@ -121,14 +120,14 @@ export function canEdit(state) {
 function selectAnonymousView(state) {
   // třetí osa rozhodování
   switch (state.ui.mode) {
-    case 'ANIME_DETAIL':
+    case CONST.DETAIL:
       return {
-        type: 'ANIME_DETAIL',
+        type: CONST.DETAIL,
         anime: selectExamById(state),
       };
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       return {
-        type: 'ANIME_SCREENING',
+        type: CONST.ANIME_LIST,
         animeList: selectExams(state),
       };
     default:
@@ -141,9 +140,9 @@ function selectAnonymousView(state) {
 
 function selectStudentView(state) {
   switch (state.ui.mode) {
-    case 'ANIME_DETAIL':
+    case CONST.DETAIL:
       return {
-        type: 'ANIME_DETAIL',
+        type: CONST.DETAIL,
         anime: selectExamById(state),
         registrations: selectVisibleRegistrationsForSelectedExam(state),
         currentRegistration: createCurrentRegistrationViewState(state),
@@ -152,9 +151,9 @@ function selectStudentView(state) {
         canUnRegister: canUnregister(state),
       };
 
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       return {
-        type: 'ANIME_SCREENING',
+        type: CONST.ANIME_LIST,
         animeList: selectExams(state),
       };
 
@@ -170,15 +169,15 @@ function selectTeacherView(state) {
   // třetí osa rozhodování
 
   switch (state.ui.mode) {
-    case 'ANIME_SCREENING':
+    case CONST.ANIME_LIST:
       return {
-        type: 'ANIME_SCREENING',
+        type: CONST.ANIME_LIST,
         animeList: selectExams(state),
       };
 
-    case 'ANIME_DETAIL':
+    case CONST.DETAIL:
       return {
-        type: 'ANIME_DETAIL',
+        type: CONST.DETAIL,
         anime: selectExamById(state),
         registrations: selectVisibleRegistrationsForSelectedExam(state),
         canEdit: canEdit(state),

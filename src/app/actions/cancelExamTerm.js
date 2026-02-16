@@ -15,7 +15,7 @@ export async function cancelExamTerm(store, api, payload) {
     store.setState((state) => {
       return {
         ...state,
-        exams: state.exams.filter((t) => t.id !== animeId),
+        animeScreening: state.animeScreening.filter((t) => t.id !== animeId),
         ui: { ...state.ui, status: "READY", errorMessage: null },
       };
     });

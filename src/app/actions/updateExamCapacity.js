@@ -32,7 +32,7 @@ export async function updateExamCapacity(store, api, payload) {
           selectedanimeId: null,
           errorMessage: null,
         },
-        exams: state.exams.map((e) => (e.id === exam.id ? exam : e)),
+        animeScreening: state.animeScreening.map((e) => (e.id === exam.id ? exam : e)),
       };
     });
   } catch (error) {

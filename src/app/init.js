@@ -8,6 +8,7 @@ import * as animeScreeningApi from '../api/animeScreeningApi.js';
 import { appInit } from './appInit.js';
 import { urlToAction } from '../infra/router/router.js';
 
+
 // 1. inicializace infrastrukturyaplikace
 const store = createStore(createInitialState());
 const dispatch = createDispatcher(store, animeScreeningApi);

@@ -21,7 +21,7 @@ export async function unregisterFromExam(store, api, payload) {
         registrations: state.registrations.map((r) =>
           r.id === registration.id ? registration : r,
         ),
-        exams: state.exams.map((e) => (e.id === exam.id ? exam : e)),
+        animeScreening: state.animeScreening.map((e) => (e.id === exam.id ? exam : e)),
         ui: { ...state.ui, status: "READY", errorMessage: null },
       };
     });

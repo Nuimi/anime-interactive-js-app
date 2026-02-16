@@ -16,7 +16,7 @@ export async function appInit(store, api)
       {
         return {
           ...state,
-          exams: examData.exams,
+          animeScreening: examData.animeScreening,
           registrations: examData.registrations,
           ui: {
             ...state.ui,

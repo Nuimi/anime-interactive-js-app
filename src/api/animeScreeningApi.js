@@ -3,7 +3,7 @@ import { getAnimeData } from "./database/animeList.js";
 import { getAnimeScreeningData } from "./database/screeningRegistrations.js";
 
 /**
- * Mock server API for exams and registrations
+ * Mock server API for animeScreening and registrations
  *
  * - simuluje serverovou perzistenci v paměti
  * - simuluje asynchronní chování (latence)
@@ -17,7 +17,7 @@ import { getAnimeScreeningData } from "./database/screeningRegistrations.js";
 // Mock * databáze *
 // ==================
 
-let exams = getAnimeData();
+let animeScreening = getAnimeData();
 let animeList = getAnimeData();
 
 let registrations = getAnimeScreeningData();
@@ -34,7 +34,7 @@ function delay(ms = 400) {
 // =========================
 
 /**
- * Fetch all exams
+ * Fetch all animeScreening
  *
  * @returns {Promise<Array<exam>>}
  */
@@ -42,7 +42,7 @@ export async function fetchAnimeListData()
 {
   await delay();
   return {
-    exams: structuredClone(animeList),
+    animeScreening: structuredClone(animeList),
     registrations: structuredClone(registrations),
   };
 }
@@ -56,7 +56,7 @@ export async function fetchAnimeListData()
 export async function cancelExamTerm(animeId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === animeId);
+  const exam = animeScreening.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
@@ -69,15 +69,15 @@ export async function cancelExamTerm(animeId) {
     throw new Error('BE: Exam term cannot be canceled - has registrations');
   }
 
-  exams.filter((e) => e.id !== exam.id);
+  animeScreening.filter((e) => e.id !== exam.id);
 
-  return { exams: structuredClone(exams) };
+  return { animeScreening: structuredClone(animeScreening) };
 }
 
 export async function registerForExam(animeId, userId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === animeId);
+  const exam = animeScreening.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
@@ -119,7 +119,7 @@ export async function registerForExam(animeId, userId) {
 export async function unregisterFromExam(animeId, userId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === animeId);
+  const exam = animeScreening.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
@@ -149,7 +149,7 @@ export async function unregisterFromExam(animeId, userId) {
 export async function updateExamCapacity(animeId, capacity) {
   await delay();
 
-  const exam = exams.find((t) => t.id === animeId);
+  const exam = animeScreening.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
