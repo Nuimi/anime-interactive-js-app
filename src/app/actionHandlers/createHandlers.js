@@ -1,15 +1,18 @@
-// src/app/actionHandlers/createExamTermHandlers.js
-
-export function createAnimeScreeningHandlers(dispatch, viewState) {
-  switch (viewState.type) {
+export function createHandlers(dispatch, viewState)
+{
+  switch (viewState.type)
+  {
     case 'ANIME_SCREENING':
       return animeScreeningHandlers(dispatch, viewState);
 
     case 'ANIME_DETAIL':
-      return examTermDetailHandlers(dispatch, viewState);
+      return animeDetailHandlers(dispatch, viewState);
 
     case 'EXAM_TERM_ADMINISTRATION':
       return examTermAdministrationHandlers(dispatch, viewState);
+
+    case 'ERROR':
+        return errorHandlers(dispatch);
 
     default:
       return {};
@@ -19,10 +22,10 @@ export function createAnimeScreeningHandlers(dispatch, viewState) {
 function animeScreeningHandlers(dispatch, viewState) {
   const handlers = {};
 
-  handlers.enterDetail = (examId) =>
+  handlers.enterDetail = (animeId) =>
     dispatch({
       type: 'ENTER_ANIME',
-      payload: { examId },
+      payload: { animeId },
     });
 
   if (viewState.canCreateExam) {
@@ -32,16 +35,16 @@ function animeScreeningHandlers(dispatch, viewState) {
   return handlers;
 }
 
-function examTermDetailHandlers(dispatch, viewState) {
+function animeDetailHandlers(dispatch, viewState) {
   const handlers = {};
-  const examId = viewState.anime.id;
+  const animeId = viewState.anime.id;
 
   //  canPublish: canPublish(state),
   if (viewState.canPublish) {
     handlers.publish = () =>
       dispatch({
         type: 'PUBLISH_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -50,7 +53,7 @@ function examTermDetailHandlers(dispatch, viewState) {
     handlers.unpublish = () =>
       dispatch({
         type: 'UNPUBLISH_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -59,7 +62,7 @@ function examTermDetailHandlers(dispatch, viewState) {
     handlers.cancel = () =>
       dispatch({
         type: 'CANCEL_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -68,7 +71,7 @@ function examTermDetailHandlers(dispatch, viewState) {
     handlers.edit = () =>
       dispatch({
         type: 'EXAM_TERM_ADMINISTRATION',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -76,7 +79,7 @@ function examTermDetailHandlers(dispatch, viewState) {
     handlers.register = () =>
       dispatch({
         type: 'REGISTER_FOR_EXAM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -84,7 +87,7 @@ function examTermDetailHandlers(dispatch, viewState) {
     handlers.unregister = () =>
       dispatch({
         type: 'UNREGISTER_FROM_EXAM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -95,7 +98,7 @@ function examTermDetailHandlers(dispatch, viewState) {
   handlers.enterAdministration = () =>
     dispatch({
       type: 'ENTER_EXAM_TERM_ADMINISTRATION',
-      payload: { examId },
+      payload: { animeId },
     });
 
   return handlers;
@@ -103,13 +106,13 @@ function examTermDetailHandlers(dispatch, viewState) {
 
 function examTermAdministrationHandlers(dispatch, viewState) {
   const handlers = {};
-  const examId = viewState.anime.id;
+  const animeId = viewState.anime.id;
 
   if (viewState.canPublish) {
     handlers.publish = () =>
       dispatch({
         type: 'PUBLISH_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -117,7 +120,7 @@ function examTermAdministrationHandlers(dispatch, viewState) {
     handlers.unpublish = () =>
       dispatch({
         type: 'UNPUBLISH_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -125,7 +128,7 @@ function examTermAdministrationHandlers(dispatch, viewState) {
     handlers.cancel = () =>
       dispatch({
         type: 'CANCEL_EXAM_TERM',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
@@ -133,15 +136,24 @@ function examTermAdministrationHandlers(dispatch, viewState) {
     handlers.edit = () =>
       dispatch({
         type: 'EXAM_TERM_ADMINISTRATION',
-        payload: { examId },
+        payload: { animeId },
       });
   }
 
   handlers.backToDetail = () =>
     dispatch({
       type: 'ENTER_ANIME',
-      payload: { examId },
+      payload: { animeId },
     });
 
   return handlers;
+}
+
+export function errorHandlers(dispatch) {
+    return {
+        onContinue: () =>
+            dispatch({
+                type: "RECOVER_FROM_ERROR",
+            }),
+    };
 }

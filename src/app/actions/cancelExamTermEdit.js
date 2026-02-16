@@ -5,7 +5,7 @@ export function cancelExamTermEdit(store) {
       ui: {
         ...state.ui,
         mode: "LIST",
-        selectedExamId: null,
+        selectedanimeId: null,
       },
     };
   });

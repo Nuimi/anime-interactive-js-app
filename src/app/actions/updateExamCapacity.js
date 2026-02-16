@@ -1,8 +1,8 @@
 export async function updateExamCapacity(store, api, payload) {
-  const { examId, capacity } = payload;
+  const { animeId, capacity } = payload;
   console.log(
     "Dostal jsem data pro zápis na termín, termín: ",
-    examId,
+    animeId,
     " nová kapacita: ",
     capacity,
   );
@@ -20,7 +20,7 @@ export async function updateExamCapacity(store, api, payload) {
   });
 
   try {
-    const { exam } = await api.updateExamCapacity(examId, capacity);
+    const { exam } = await api.updateExamCapacity(animeId, capacity);
 
     store.setState((state) => {
       return {
@@ -29,7 +29,7 @@ export async function updateExamCapacity(store, api, payload) {
           ...state.ui,
           status: "READY",
           mode: "LIST",
-          selectedExamId: null,
+          selectedanimeId: null,
           errorMessage: null,
         },
         exams: state.exams.map((e) => (e.id === exam.id ? exam : e)),

@@ -5,7 +5,7 @@ export function startExamTermEdit(store, payload) {
       ui: {
         ...state.ui,
         mode: "EXAM_TERM_ADMINISTRATION",
-        selectedExamId: payload.examId,
+        selectedanimeId: payload.animeId,
       },
     };
   });

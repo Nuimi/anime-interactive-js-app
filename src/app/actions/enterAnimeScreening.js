@@ -7,7 +7,7 @@ export function enterAnimeScreening({ store })
         ui: {
           ...state.ui,
           mode: 'ANIME_SCREENING',
-          selectedExamId: null,
+          selectedanimeId: null,
           status: 'READY',
           errorMessage: null,
         },

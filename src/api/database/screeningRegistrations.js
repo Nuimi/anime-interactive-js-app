@@ -2,12 +2,12 @@ export function getAnimeScreeningData()
 {
     return  [
         {
-            examId: 'e1',
+            animeId: 'a1',
             userId: 'student-1',
             status: 'REGISTERED'
         },
         {
-            examId: 'e1',
+            animeId: 'a1',
             userId: 'student-2',
             status: 'REGISTERED'
         }

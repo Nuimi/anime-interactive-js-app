@@ -10,19 +10,19 @@ export function selectExams(state) {
 }
 
 export function selectExamById(state) {
-  const examId = state.ui.selectedExamId;
-  if (!examId) return null;
-  return state.exams.find((e) => e.id === examId) ?? null;
+  const animeId = state.ui.selectedanimeId;
+  if (!animeId) return null;
+  return state.exams.find((e) => e.id === animeId) ?? null;
 }
 
 export function selectCurrentRegistration(state) {
-  const examId = state.ui.selectedExamId;
+  const animeId = state.ui.selectedanimeId;
   const userId = state.auth.userId;
 
-  if (!examId || !userId) return null;
+  if (!animeId || !userId) return null;
 
   return (
-    state.registrations.find((r) => r.userId === userId && r.examId === examId && r.status === 'REGISTERED') || null
+    state.registrations.find((r) => r.userId === userId && r.animeId === animeId && r.status === 'REGISTERED') || null
   );
 }
 
@@ -33,15 +33,15 @@ export function createCurrentRegistrationViewState(state) {
 }
 
 export function selectVisibleRegistrationsForSelectedExam(state) {
-  const examId = state.ui.selectedExamId;
-  if (!examId) return [];
+  const animeId = state.ui.selectedanimeId;
+  if (!animeId) return [];
 
   const { role, userId } = state.auth;
   if (role === 'ANONYMOUS') {
     return [];
   }
 
-  const examRegistrations = state.registrations.filter((r) => r.examId === examId);
+  const examRegistrations = state.registrations.filter((r) => r.animeId === animeId);
 
   if (role === 'TEACHER') {
     return examRegistrations.filter((r) => r.status === 'REGISTERED');
@@ -205,15 +205,17 @@ function selectTeacherView(state) {
   }
 }
 
-export function selectViewState(state) {
-  console.log('selectViewState got state', state);
+export function selectViewState(state)
+{
+  const { status, errorMessage, mode } = state.ui;
 
-  switch (state.ui.status) {
+  switch (status)
+  {
     case 'LOADING':
       return { type: 'LOADING' };
 
     case 'ERROR':
-      return { type: 'ERROR', message: state.ui.errorMessage };
+      return { type: 'ERROR', message: errorMessage };
 
     case 'READY':
       // druhá osa rozhodování

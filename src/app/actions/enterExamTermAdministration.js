@@ -1,11 +1,11 @@
 export function enterExamTermAdministration({ store, payload }) {
-  const { examId } = payload;
+  const { animeId } = payload;
   store.setState((state) => ({
     ...state,
     ui: {
       ...state.ui,
       mode: 'EXAM_TERM_ADMINISTRATION',
-      selectedExamId: examId,
+      selectedanimeId: animeId,
       status: 'READY',
       errorMessage: null,
     },

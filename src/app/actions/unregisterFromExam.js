@@ -1,5 +1,5 @@
 export async function unregisterFromExam(store, api, payload) {
-  const { examId } = payload;
+  const { animeId } = payload;
   const state = store.getState();
   const userId = state.currentUser.userId;
 
@@ -12,7 +12,7 @@ export async function unregisterFromExam(store, api, payload) {
   });
 
   try {
-    const { exam, registration } = await api.unregisterFromExam(examId, userId);
+    const { exam, registration } = await api.unregisterFromExam(animeId, userId);
 
     // lokální aktualizace stavu
     store.setState((state) => {

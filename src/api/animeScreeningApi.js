@@ -50,20 +50,20 @@ export async function fetchAnimeListData()
 /**
  * Enroll current student to an exam
  *
- * @param {string} examId
+ * @param {string} animeId
  * @returns {Promise<registration>}
  */
-export async function cancelExamTerm(examId) {
+export async function cancelExamTerm(animeId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === examId);
+  const exam = exams.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
   }
 
   // je někdo zapsaný na termín?
-  const hasRegistrations = registrations.some((e) => e.examId === examId && e.status === 'REGISTERED');
+  const hasRegistrations = registrations.some((e) => e.animeId === animeId && e.status === 'REGISTERED');
 
   if (hasRegistrations) {
     throw new Error('BE: Exam term cannot be canceled - has registrations');
@@ -74,10 +74,10 @@ export async function cancelExamTerm(examId) {
   return { exams: structuredClone(exams) };
 }
 
-export async function registerForExam(examId, userId) {
+export async function registerForExam(animeId, userId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === examId);
+  const exam = exams.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
@@ -90,7 +90,7 @@ export async function registerForExam(examId, userId) {
 
   // invariant: student cannot be REGISTERED twice
   const existingRegistration = registrations.find(
-    (e) => e.examId === examId && e.userId === userId && e.status === 'REGISTERED',
+    (e) => e.animeId === animeId && e.userId === userId && e.status === 'REGISTERED',
   );
 
   if (existingRegistration) {
@@ -103,7 +103,7 @@ export async function registerForExam(examId, userId) {
   const registration = {
     id: crypto.randomUUID(),
     userId,
-    examId,
+    animeId,
     status: 'REGISTERED',
     createdAt: new Date().toISOString(),
   };
@@ -116,10 +116,10 @@ export async function registerForExam(examId, userId) {
   };
 }
 
-export async function unregisterFromExam(examId, userId) {
+export async function unregisterFromExam(animeId, userId) {
   await delay();
 
-  const exam = exams.find((t) => t.id === examId);
+  const exam = exams.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');
@@ -127,7 +127,7 @@ export async function unregisterFromExam(examId, userId) {
 
   // existuje zápis se stavem REGISTERED?
   const registration = registrations.find(
-    (e) => e.examId === examId && e.userId === userId && e.status === 'REGISTERED',
+    (e) => e.animeId === animeId && e.userId === userId && e.status === 'REGISTERED',
   );
 
   if (!registration) {
@@ -146,10 +146,10 @@ export async function unregisterFromExam(examId, userId) {
   };
 }
 
-export async function updateExamCapacity(examId, capacity) {
+export async function updateExamCapacity(animeId, capacity) {
   await delay();
 
-  const exam = exams.find((t) => t.id === examId);
+  const exam = exams.find((t) => t.id === animeId);
 
   if (!exam) {
     throw new Error('BE: Exam term not found');

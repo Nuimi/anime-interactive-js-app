@@ -6,7 +6,7 @@ export function enterAnime({ store, payload })
         ui: {
           ...state.ui,
           mode: 'ANIME_DETAIL',
-          selectedExamId: payload.examId,
+          selectedanimeId: payload.animeId,
           status: 'READY',
           errorMessage: null,
         },

@@ -1,5 +1,5 @@
 export async function cancelExamTerm(store, api, payload) {
-  const { examId } = payload;
+  const { animeId } = payload;
   //const state = store.getState();
 
   store.setState((state) => {
@@ -10,12 +10,12 @@ export async function cancelExamTerm(store, api, payload) {
   });
 
   try {
-    await api.cancelExamTerm(examId);
+    await api.cancelExamTerm(animeId);
     // volání neskončilo chybou, zkouškový termín lze zrušit
     store.setState((state) => {
       return {
         ...state,
-        exams: state.exams.filter((t) => t.id !== examId),
+        exams: state.exams.filter((t) => t.id !== animeId),
         ui: { ...state.ui, status: "READY", errorMessage: null },
       };
     });

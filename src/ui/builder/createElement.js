@@ -22,6 +22,14 @@ export function createElement(tag, options = {}, children = [])
                 element.appendChild(document.createTextNode(child));
             } else if (child instanceof Node) {
                 element.appendChild(child);
+            } else if (typeof child === "object") {
+                const div = document.createElement('div')
+                child.forEach((childSmall) =>
+                    {
+                        div.appendChild(childSmall)
+                    }
+                );
+                element.appendChild(div);
             }
         }
     );

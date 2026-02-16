@@ -1,5 +1,5 @@
 export async function registerForExam(store, api, payload) {
-  const { examId } = payload;
+  const { animeId } = payload;
   const state = store.getState();
 
   // invariant:
@@ -9,11 +9,11 @@ export async function registerForExam(store, api, payload) {
     ui: { ...state.ui, status: "LOADING", errorMessage: null },
   }));
   console.log(
-    `Data pro zápis na termín. Termín: ${examId}, student: ${state.currentUser.userId}`,
+    `Data pro zápis na termín. Termín: ${animeId}, student: ${state.currentUser.userId}`,
   );
   try {
     const { exam, registration } = await api.registerForExam(
-      examId,
+      animeId,
       state.currentUser.userId,
     );
 

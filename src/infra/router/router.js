@@ -32,7 +32,7 @@ export function parsePath(path)
   {
     return {
       route: 'ANIME',
-      examId: parts[1],
+      animeId: parts[1],
     };
   }
 
@@ -41,7 +41,7 @@ export function parsePath(path)
   {
     return {
       route: 'EXAM_TERM_ADMINISTRATION',
-      examId: parts[1],
+      animeId: parts[1],
     };
   }
 
@@ -64,7 +64,7 @@ export function routeToAction(parsed)
       return {
         type: 'ENTER_ANIME',
         payload: {
-          examId: parsed.examId,
+          animeId: parsed.animeId,
         },
       };
 
@@ -72,7 +72,7 @@ export function routeToAction(parsed)
       return {
         type: 'ENTER_EXAM_TERM_ADMINISTRATION',
         payload: {
-          examId: parsed.examId,
+          animeId: parsed.animeId,
         },
       };
 

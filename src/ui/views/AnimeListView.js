@@ -7,9 +7,10 @@ import { createCard } from "../builder/layout/card.js";
 
 export function AnimeListView({ viewState, handlers })
 {
+  const { animeList, capabilities } = viewState;
   const root = createSection('', [
       createTitle(1, 'Anime screenings'),
-      renderAnimeScreening(viewState.animeList, handlers)
+      renderAnimeScreening(animeList, handlers, capabilities)
     ]
   );
 
@@ -22,13 +23,11 @@ export function AnimeListView({ viewState, handlers })
   return root;
 }
 
-function renderAnimeScreening(anime, handlers)
+function renderAnimeScreening(anime, handlers, capabilities)
 {
-  if (!anime || anime.length === 0)
-  {
-    return createText('No screening.');
-  }
 
+  // const { canEnterDetail, canEnterAdministration, canCreateExam } = capabilities;
+  const { enterDetail, onEnterAdministration, onCreateExamTerm } = handlers;
   const cards = createSection( 'cards');
 
   anime.forEach((anime) =>
@@ -39,7 +38,10 @@ function renderAnimeScreening(anime, handlers)
              title: anime.name,
              description: `State of ordering: ${anime.status}`,
              description2: `Capacity: ${anime.registeredCount} / ${anime.capacity}`,
-             button: button( () => handlers.enterDetail(anime.id))
+             button: [
+                buttonDetail( () => enterDetail(anime.id)),
+                buttonAdmin( () => onEnterAdministration(anime.id))
+               ]
            };
         const card = createCard(data);
         cards.appendChild(card);
@@ -60,9 +62,16 @@ function renderActions(handlers)
   return div;
 }
 
-function button( onClick)
+function buttonDetail( onClick)
 {
   const btn = createButton('button--primary', 'Detail');
+  btn.addEventListener('click', onClick);
+  return createDiv('text-center', [btn]);
+}
+
+function buttonAdmin( onClick)
+{
+  const btn = createButton('button--success', 'Admin');
   btn.addEventListener('click', onClick);
   return createDiv('text-center', [btn]);
 }

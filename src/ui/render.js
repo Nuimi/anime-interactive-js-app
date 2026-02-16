@@ -1,5 +1,5 @@
 import { selectViewState } from '../infra/store/selectors.js';
-import { createAnimeScreeningHandlers } from '../app/actionHandlers/animeScreeningHandlers.js';
+import { createHandlers } from '../app/actionHandlers/createHandlers.js';
 import { LoadingView } from './views/LoadingView.js';
 import { ErrorView } from './views/ErrorView.js';
 import { AnimeListView } from './views/AnimeListView.js';
@@ -34,7 +34,7 @@ export function render(root, state, dispatch) {
 
   const viewState = selectViewState(state);
 
-  const handlers = createAnimeScreeningHandlers(dispatch, viewState);
+  const handlers = createHandlers(dispatch, viewState);
 
   let view;
 

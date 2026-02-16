@@ -49,7 +49,7 @@ export function createDispatcher(store, api) {
         return startExamTermEdit({ store, payload: action.payload });
 
       case 'UPDATE_EXAM_CAPACITY':
-        // předáváme payload: { examId, capacity }
+        // předáváme payload: { animeId, capacity }
         return updateExamCapacity({ store, api, payload: action.payload });
 
       case 'CANCEL_CHANGES':
