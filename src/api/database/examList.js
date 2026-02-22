@@ -6,7 +6,7 @@ export function getExamData()
             name: 'TNPW2, 2026-01-20',
             date: '2026-01-20',
             capacity: 10,
-            registeredCount: 1,
+            registeredCount: 2,
             status: 'PUBLISHED',
         },
         {
