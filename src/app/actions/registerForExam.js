@@ -1,39 +1,35 @@
-export async function registerForExam(store, api, payload) {
-  const { animeId } = payload;
-  const state = store.getState();
+export async function registerForExam({ store, api, payload }) {
+  const token = store.getState().auth.token;
+  const { examId } = payload;
 
-  // invariant:
+  const userId = store.getState().auth.userId;
 
-  store.setState((state) => ({
-    ...state,
-    ui: { ...state.ui, status: "LOADING", errorMessage: null },
-  }));
-  console.log(
-    `Data pro zápis na termín. Termín: ${animeId}, student: ${state.currentUser.userId}`,
-  );
-  try {
-    const { exam, registration } = await api.registerForExam(
-      animeId,
-      state.currentUser.userId,
-    );
+  const { status, reason, registration, exam } = await api.registerForExam(examId, userId, token);
 
-    store.setState((state) => ({
+  store.setState((state) => {
+    let { exams, registrations } = state;
+    let notification = null;
+
+    if (status === 'SUCCESS') {
+      exams = state.exams.map((e) => (e.id === exam.id ? exam : e));
+      registrations = [...state.registrations, registration];
+    }
+
+    if (status === 'REJECTED') {
+      notification = {
+        type: 'WARNING',
+        message: 'Registraci nelze vytvořit', // TODO překlad reason
+      };
+    }
+
+    return {
       ...state,
-      ui: { ...state.ui, status: "READY", errorMessage: null },
-      registrations: [...state.registrations, registration],
-      animeScreening: state.animeScreening.map((e) => (e.id === exam.id ? exam : e)),
-    }));
-    console.log(
-      "Stav aktualizovaný po odpovědi backendu, zkoušky:",
-      store.getState().animeScreening,
-    );
-  } catch (error) {
-    store.setState((state) => ({
-      ...state,
+      exams,
+      registrations,
       ui: {
-        status: "ERROR",
-        errorMessage: error.message ?? "Neznámá chyba",
+        ...state.ui,
+        notification,
       },
-    }));
-  }
+    };
+  });
 }

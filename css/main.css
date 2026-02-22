@@ -57,7 +57,13 @@ body {
   font-weight: bold;
 }
 .mb-15 {
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
+}
+.mt-15 {
+  margin-top: 15px !important;
+}
+.w-25 {
+  width: 25vw;
 }
 .cards {
   margin-top: 15px;
@@ -74,7 +80,7 @@ body {
   color: var(--color-fg);
 }
 .card__title {
-  margin: 0 17px 15px;
+  margin: 0 17px 5px;
   overflow: hidden;
   text-align: center;
 }
@@ -149,6 +155,18 @@ body {
   border: 1px solid var(--success);
   background-color: var(--surface);
   color: var(--success);
+}
+input[type=text],
+input[type=number],
+input[type=datetime-local],
+input[type=date] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 @media (max-width: 768px) {
   .cards {

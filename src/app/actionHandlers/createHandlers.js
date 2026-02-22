@@ -1,161 +1,285 @@
 import * as CONST from '../../constants.js';
 
-export function createHandlers(dispatch, viewState)
-{
-  switch (viewState.type)
-  {
-    case CONST.ANIME_LIST:
-      return animeScreeningHandlers(dispatch, viewState);
+/*
+ ** viewState má tvar
+ ** {
+ **   type: 'LOADING' | 'ERROR' | EXAM_TERM_LIST | 'EXAM_TERM_DETAIL' | 'EXAM_TERM_ADMINISTRATION',
+ **   message?: string ,
+ **   exam?: ExamTerm,
+ **   exams?: ExamTerm[],
+ **   capabilities?: {
+ **     canEnterDetail: boolean,
+ **     canEnterAdministration: boolean,
+ **     canBackToList: boolean,
+ **     canCreateExam: boolean,
+ **     canRegister: boolean,
+ **     canUnregister: boolean,
+ **     canPublish: boolean,
+ **     canUnpublish: boolean,
+ **     canCancel: boolean,
+ **     canDelete: boolean,
+ **     canUpdateCapacity: boolean,
+ **     canUpdate: boolean
+ **   },
+ ** }
+ */
 
-    case CONST.DETAIL:
-      return animeDetailHandlers(dispatch, viewState);
+export function createHandlers(dispatch, viewState) {
+  switch (viewState.type) {
+    case CONST.EXAM_LIST:
+      return examTermListHandlers(dispatch, viewState);
+
+    case 'EXAM_TERM_DETAIL':
+      return examTermDetailHandlers(dispatch, viewState);
 
     case 'EXAM_TERM_ADMINISTRATION':
       return examTermAdministrationHandlers(dispatch, viewState);
 
     case 'ERROR':
-        return errorHandlers(dispatch);
+      return errorHandlers(dispatch);
 
     default:
       return {};
   }
 }
 
-function animeScreeningHandlers(dispatch, viewState) {
+/* viewState ma tvar:
+ *  {
+ *    type: EXAM_TERM_LIST,
+ *    exams,
+ *    capabilities: {
+ *      canEnterDetail: true,
+ *      canEnterAdministration: canEnterAdministration(state),
+ *      canCreateExam: canCreateExam(state),
+ *    },
+ *  }
+ */
+
+export function examTermListHandlers(dispatch, viewState) {
+  const { capabilities } = viewState;
+  const { canEnterDetail, canEnterAdministration, canCreateExam } = capabilities;
+
   const handlers = {};
 
-  handlers.enterDetail = (animeId) =>
-    dispatch({
-      type: 'ENTER_ANIME',
-      payload: { animeId },
-    });
+  if (canEnterDetail) {
+    handlers.onEnterDetail = (examId) =>
+      dispatch({
+        type: 'ENTER_EXAM_TERM_DETAIL',
+        payload: { examId },
+      });
+  }
 
-  if (viewState.canCreateExam) {
-    handlers.createExamTerm = () => dispatch({ type: 'CREATE_EXAM_TERM' });
+  if (canEnterAdministration) {
+    handlers.onEnterAdministration = (examId) =>
+      dispatch({
+        type: 'ENTER_EXAM_TERM_ADMINISTRATION',
+        payload: { examId },
+      });
+  }
+
+  if (canCreateExam) {
+    handlers.onCreateExamTerm = (data) =>
+      dispatch({
+        type: 'CREATE_EXAM_TERM',
+        payload: data,
+      });
   }
 
   return handlers;
 }
 
-function animeDetailHandlers(dispatch, viewState) {
+/* viewState má tvar:
+ *  {
+ *    type: 'EXAM_TERM_DETAIL',
+ *    exam,
+ *    capabilities: {
+ *      canBackToList: true,
+ *      canEnterAdministration: canEnterAdministration(state),
+ *      canRegister: canRegister(state),
+ *      canUnregister: canUnregister(state),
+ *      canPublish: canPublish(state),
+ *      canUnpublish: canUnpublish(state),
+ *      canCancel: canCancel(state),
+ *      canDelete: canDelete(state),
+ *    },
+ *  }
+ */
+export function examTermDetailHandlers(dispatch, viewState) {
+  const { capabilities } = viewState;
+  const {
+    canBackToList,
+    canEnterAdministration,
+    canRegister,
+    canUnregister,
+    canPublish,
+    canUnpublish,
+    canCancel,
+    canDelete,
+  } = capabilities;
   const handlers = {};
-  const animeId = viewState.anime.id;
+  const examId = viewState.exam?.id;
 
-  //  canPublish: canPublish(state),
-  if (viewState.canPublish) {
-    handlers.publish = () =>
+  if (!examId) {
+    return handlers;
+  }
+
+  /*******************************************
+   * navigační akce
+   *
+   ******************************************/
+  // canBackToList: true
+  if (canBackToList) {
+    handlers.onBackToList = () => dispatch({ type: CONST.ENTER_LIST });
+  }
+
+  // canEnterAdministration: canEnterAdministration(state)
+  if (canEnterAdministration) {
+    handlers.onEnterAdministration = () =>
       dispatch({
-        type: 'PUBLISH_EXAM_TERM',
-        payload: { animeId },
+        type: 'ENTER_EXAM_TERM_ADMINISTRATION',
+        payload: { examId },
       });
   }
 
-  //  canUnpublish: canUnpublish(state),
-  if (viewState.canUnpublish) {
-    handlers.unpublish = () =>
+  /*******************************************
+   * doménové akce, na základě kontextu
+   *
+   *******************************************/
+
+  // canRegister: canRegister(state)
+  if (canRegister) {
+    handlers.onRegister = () =>
       dispatch({
-        type: 'UNPUBLISH_EXAM_TERM',
-        payload: { animeId },
+        type: 'REGISTER_FOR_EXAM_TERM',
+        payload: { examId },
       });
   }
 
-  //  canCancel: canCancel(state),
-  if (viewState.canCancel) {
-    handlers.cancel = () =>
-      dispatch({
-        type: 'CANCEL_EXAM_TERM',
-        payload: { animeId },
-      });
-  }
-
-  //  canEdit: canEdit(state),
-  if (viewState.canEdit) {
-    handlers.edit = () =>
-      dispatch({
-        type: 'EXAM_TERM_ADMINISTRATION',
-        payload: { animeId },
-      });
-  }
-
-  if (viewState.canRegister) {
-    handlers.register = () =>
-      dispatch({
-        type: 'REGISTER_FOR_EXAM',
-        payload: { animeId },
-      });
-  }
-
-  if (viewState.canUnRegister) {
-    handlers.unregister = () =>
+  // canUnregister: canUnregister(state)
+  if (canUnregister) {
+    handlers.onUnregister = () =>
       dispatch({
         type: 'UNREGISTER_FROM_EXAM',
-        payload: { animeId },
+        payload: { examId },
       });
   }
 
-  // navigační akce, bez podmínek, na základě kontextu
-  handlers.backToList = () =>
-      dispatch({ type: 'ENTER_ANIME_SCREENING' });
+  //  canPublish: canPublish(state)
+  if (canPublish) {
+    handlers.onPublish = () =>
+      dispatch({
+        type: 'PUBLISH_EXAM_TERM',
+        payload: { examId },
+      });
+  }
 
-  handlers.enterAdministration = () =>
-    dispatch({
-      type: 'ENTER_EXAM_TERM_ADMINISTRATION',
-      payload: { animeId },
-    });
+  //  canUnpublish: canUnpublish(state)
+  if (canUnpublish) {
+    handlers.onUnpublish = () =>
+      dispatch({
+        type: 'UNPUBLISH_EXAM_TERM',
+        payload: { examId },
+      });
+  }
+
+  //  canCancel: canCancel(state)
+  if (canCancel) {
+    handlers.onCancel = () =>
+      dispatch({
+        type: 'CANCEL_EXAM_TERM',
+        payload: { examId },
+      });
+  }
+
+  // canDelete: canDelete(state)
+  if (canDelete) {
+    handlers.onDelete = () =>
+      dispatch({
+        type: 'DELETE_EXAM_TERM',
+        payload: { examId },
+      });
+  }
 
   return handlers;
 }
 
-function examTermAdministrationHandlers(dispatch, viewState) {
+/* viewState ma tvar: {
+    type: 'EXAM_TERM_ADMINISTRATION',
+    exam,
+    capabilities: {
+      canBackToList: true,
+      canDelete: canDelete(state),
+      canCancel: canCancel(state),
+      canUpdateCapacity: canUpdateCapacity(state),
+      canUpdate: canUpdate(state), // nastavení parametrů termínu - kapacita, název, čas
+    },
+  }
+*/
+export function examTermAdministrationHandlers(dispatch, viewState) {
+  const { capabilities } = viewState;
+  const { canBackToList, canDelete, canCancel, canUpdateCapacity, canUpdate } = capabilities;
   const handlers = {};
-  const animeId = viewState.anime.id;
+  const examId = viewState.exam?.id;
 
-  if (viewState.canPublish) {
-    handlers.publish = () =>
+  /*******************************************
+   * navigační akce
+   *
+   ******************************************/
+  // canBackToList: true
+  if (canBackToList) {
+    handlers.onBackToList = () => dispatch({ type: CONST.ENTER_LIST });
+  }
+
+  /*******************************************
+   * doménové akce, na základě kontextu
+   *
+   *******************************************/
+  if (!examId) {
+    return handlers;
+  }
+
+  // canDelete: canDelete(state)
+  if (canDelete) {
+    handlers.onDelete = () =>
       dispatch({
-        type: 'PUBLISH_EXAM_TERM',
-        payload: { animeId },
+        type: 'DELETE_EXAM_TERM',
+        payload: { examId },
       });
   }
 
-  if (viewState.canUnpublish) {
-    handlers.unpublish = () =>
-      dispatch({
-        type: 'UNPUBLISH_EXAM_TERM',
-        payload: { animeId },
-      });
-  }
-
-  if (viewState.canCancel) {
-    handlers.cancel = () =>
+  // canCancel: canCancel(state)
+  if (canCancel) {
+    handlers.onCancel = () =>
       dispatch({
         type: 'CANCEL_EXAM_TERM',
-        payload: { animeId },
+        payload: { examId },
       });
   }
 
-  if (viewState.canEdit) {
-    handlers.edit = () =>
+  // canUpdateCapacity: canUpdateCapacity(state)
+  if (canUpdateCapacity) {
+    handlers.onUpdateCapacity = (capacity) =>
       dispatch({
-        type: 'EXAM_TERM_ADMINISTRATION',
-        payload: { animeId },
+        type: 'UPDATE_EXAM_CAPACITY',
+        payload: { examId, capacity },
       });
   }
 
-  handlers.backToDetail = () =>
-    dispatch({
-      type: 'ENTER_ANIME',
-      payload: { animeId },
-    });
-
+  // canUpdate: canUpdate(state)
+  if (canUpdate) {
+    handlers.onUpdate = (data) =>
+      dispatch({
+        type: 'UPDATE_EXAM_TERM',
+        payload: { examId, ...data },
+      });
+  }
   return handlers;
 }
 
 export function errorHandlers(dispatch) {
-    return {
-        onContinue: () =>
-            dispatch({
-                type: "RECOVER_FROM_ERROR",
-            }),
-    };
+  const handlers = {
+    onContinue: () => dispatch({ type: CONST.ENTER_LIST }),
+  };
+
+  return handlers;
 }

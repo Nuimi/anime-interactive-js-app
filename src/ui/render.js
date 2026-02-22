@@ -1,9 +1,12 @@
+// src/ui/render.js
+
 import { selectViewState } from '../infra/store/selectors.js';
 import { createHandlers } from '../app/actionHandlers/createHandlers.js';
+
 import { LoadingView } from './views/LoadingView.js';
 import { ErrorView } from './views/ErrorView.js';
-import { AnimeListView } from './views/AnimeListView.js';
-import { AnimeScreeningDetailView } from './views/AnimeScreeningDetailView.js';
+import { ExamTermListView } from './views/ExamTermListView.js';
+import { ExamTermDetailView } from './views/ExamTermDetailView.js';
 import { ExamTermAdministrationView } from './views/ExamTermAdministrationView.js';
 
 import * as CONST from '../constants.js';
@@ -11,10 +14,10 @@ import * as CONST from '../constants.js';
 /*
  ** viewState má tvar
  ** {
- **   type: 'LOADING' | 'ERROR' | 'EXAM_TERM_LIST' | 'EXAM_TERM_DETAIL' | 'EXAM_TERM_ADMINISTRATION',
+ **   type: 'LOADING' | 'ERROR' | EXAM_TERM_LIST | 'EXAM_TERM_DETAIL' | 'EXAM_TERM_ADMINISTRATION',
  **   message?: string ,
  **   exam?: ExamTerm,
- **   animeScreening?: ExamTerm[],
+ **   exams?: ExamTerm[],
  **   capabilities?: {
  **     canEnterDetail: boolean,
  **     canEnterAdministration: boolean,
@@ -31,11 +34,13 @@ import * as CONST from '../constants.js';
  **   },
  ** }
  */
+
 export function render(root, state, dispatch) {
   root.replaceChildren();
 
   const viewState = selectViewState(state);
 
+  // továrna ovladačů, t.j. handlerů
   const handlers = createHandlers(dispatch, viewState);
 
   let view;
@@ -46,27 +51,24 @@ export function render(root, state, dispatch) {
       break;
 
     case 'ERROR':
-      view = ErrorView({ message: viewState.message });
+      view = ErrorView({ message: viewState.message, handlers });
       break;
 
-    case CONST.ANIME_LIST:
-      view = AnimeListView({ viewState, handlers });
+    case CONST.EXAM_LIST:
+      view = ExamTermListView({ viewState, handlers });
       break;
 
-    case CONST.DETAIL:
-      if (!viewState.anime)
-      {
-        view = ErrorView({ message: 'Anime screening was not found.' });
+    case 'EXAM_TERM_DETAIL':
+      if (!viewState.exam) {
+        view = ErrorView({ message: 'Zkouškový termín nebyl nalezen.' });
       } else {
-        view = AnimeScreeningDetailView({ viewState, handlers });
+        view = ExamTermDetailView({ viewState, handlers });
       }
       break;
 
     case 'EXAM_TERM_ADMINISTRATION':
-
-      if (!viewState.anime)
-      {
-        view = ErrorView({ message: 'Anime screening was not found.' });
+      if (!viewState.exam) {
+        view = ErrorView({ message: 'Zkouškový termín nebyl nalezen.' });
       } else {
         view = ExamTermAdministrationView({ viewState, handlers });
       }
@@ -78,10 +80,10 @@ export function render(root, state, dispatch) {
 
   root.appendChild(view);
 
+  // notifikace (toast)
   const { notification } = state.ui;
 
-  if (notification)
-  {
+  if (notification) {
     const notificationElement = document.createElement('div');
     notificationElement.textContent = notification.message;
     notificationElement.classList.add('notification');

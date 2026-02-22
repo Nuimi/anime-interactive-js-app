@@ -1,33 +1,31 @@
-export async function cancelExamTerm(store, api, payload) {
-  const { animeId } = payload;
-  //const state = store.getState();
+export async function cancelExamTerm({ store, api, payload }) {
+  const token = store.getState().auth.token;
+  const { examId } = payload;
+
+  const { status, reason, exam } = await api.cancelExamTerm(examId, token);
 
   store.setState((state) => {
+    let { exams } = state;
+    let notification = null;
+
+    if (status === "SUCCESS") {
+      exams = state.exams.map((e) => (e.id === exam.id ? exam : e));
+    }
+
+    if (status === "REJECTED") {
+      notification = {
+        type: "WARNING",
+        message: "Termín nelze zrušit", // TODO překlad reason
+      };
+    }
+
     return {
       ...state,
-      ui: { ...state.ui, status: "LOADING", errorMessage: null },
+      exams,
+      ui: {
+        ...state.ui,
+        notification,
+      },
     };
   });
-
-  try {
-    await api.cancelExamTerm(animeId);
-    // volání neskončilo chybou, zkouškový termín lze zrušit
-    store.setState((state) => {
-      return {
-        ...state,
-        animeScreening: state.animeScreening.filter((t) => t.id !== animeId),
-        ui: { ...state.ui, status: "READY", errorMessage: null },
-      };
-    });
-  } catch (error) {
-    store.setState((state) => {
-      return {
-        ...state,
-        ui: {
-          status: "ERROR",
-          errorMessage: error.message ?? "FE: Nelze zrušit zkouškový termín",
-        },
-      };
-    });
-  }
 }

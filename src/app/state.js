@@ -1,4 +1,4 @@
-// src/app/state.js
+import * as CONST from '../constants.js';
 /*
 UI state contract
 =================
@@ -16,18 +16,20 @@ READY -> ERROR
 export function createInitialState() {
   return {
     // ====== domain data =======
-    animeScreening: [],
+    exams: [],
     registrations: [],
     evaluations: [],
 
-    // ====== identity (temporary, simplified) ======
-    currentUser: { userId: 'teacher-1' }, // možné hodnoty "student-1", "teacher-1"
-    auth: { role: 'TEACHER' }, // možné hodnoty "ANONYMOUS", "STUDENT", "TEACHER
+    // ====== identity  ======
+    auth: { role: 'ANONYMOUS', userId: null, token: null },
 
     // ====== UI state =========
     ui: {
-      status: 'READY',
+      mode: CONST.EXAM_LIST,
+      selectedExamId: null,
+      status: 'LOADING',
       errorMessage: null,
+      notification: null,
     },
   };
 }

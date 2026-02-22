@@ -26,7 +26,12 @@ export function createElement(tag, options = {}, children = [])
                 const div = document.createElement('div')
                 child.forEach((childSmall) =>
                     {
-                        div.appendChild(childSmall)
+                        if (childSmall instanceof Node)
+                        {
+                            div.appendChild(childSmall)
+                        } else {
+                            div.appendChild(document.createTextNode(childSmall));
+                        }
                     }
                 );
                 element.appendChild(div);

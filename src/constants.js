@@ -1,2 +1,2 @@
-export const ANIME_LIST = 'ANIME_SCREENING'
-export const DETAIL = 'ANIME_DETAIL'
+export const EXAM_LIST = 'EXAM_TERM_LIST'
+export const ENTER_LIST = 'ENTER_EXAM_TERM_LIST'

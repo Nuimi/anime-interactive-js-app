@@ -1,49 +1,32 @@
-export async function updateExamCapacity(store, api, payload) {
-  const { animeId, capacity } = payload;
-  console.log(
-    "Dostal jsem data pro zápis na termín, termín: ",
-    animeId,
-    " nová kapacita: ",
+export async function updateExamCapacity({ store, api, payload }) {
+  const token = store.getState().auth.token;
+  const { examId, capacity } = payload;
+  const { status, reason, exam } = await api.updateExamCapacity(
+    examId,
     capacity,
+    token,
   );
 
-  // čekáme na backend
   store.setState((state) => {
+    let { exams } = state;
+    let notification = null;
+
+    if (status === "SUCCESS") {
+      exams = state.exams.map((e) => (e.id === exam.id ? exam : e));
+    }
+    if (status === "REJECTED") {
+      notification = {
+        type: "WARNING",
+        message: "Kapacitu nelze změnit", // TODO překlad reason
+      };
+    }
     return {
       ...state,
+      exams,
       ui: {
         ...state.ui,
-        status: "LOADING",
-        errorMessage: null,
+        notification,
       },
     };
   });
-
-  try {
-    const { exam } = await api.updateExamCapacity(animeId, capacity);
-
-    store.setState((state) => {
-      return {
-        ...state,
-        ui: {
-          ...state.ui,
-          status: "READY",
-          mode: "LIST",
-          selectedanimeId: null,
-          errorMessage: null,
-        },
-        animeScreening: state.animeScreening.map((e) => (e.id === exam.id ? exam : e)),
-      };
-    });
-  } catch (error) {
-    store.setState((state) => {
-      return {
-        ...state,
-        ui: {
-          status: "ERROR",
-          errorMessage: error.message ?? "Neznámá chyba",
-        },
-      };
-    });
-  }
 }

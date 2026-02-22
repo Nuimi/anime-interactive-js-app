@@ -1,7 +1,10 @@
-import { createTitle } from "../builder/components/title.js";
-import { createDiv } from "../builder/components/div.js";
-
 export function LoadingView()
 {
-  return createDiv('', [createTitle(1,'Loading')]);
+  const root = document.createElement("div");
+
+  const h1 = document.createElement("h1");
+  h1.textContent = "Načítání…";
+
+  root.appendChild(h1);
+  return root;
 }

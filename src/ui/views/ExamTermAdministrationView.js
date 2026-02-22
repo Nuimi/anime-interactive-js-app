@@ -1,73 +1,75 @@
-// src/ui/views/ExamTermAdministrationView.js
+import {createDiv} from "../builder/components/div.js";
+import {canGoBack, submitButton, addActionButton} from "./common.js";
+import { createTitle } from "../builder/components/title.js";
+import { createText } from "../builder/components/text.js";
+import { createInput } from "../builder/components/input.js";
 
-export function ExamTermAdministrationView({ viewState, handlers }) {
+export function ExamTermAdministrationView({ viewState, handlers })
+{
   const { exam, capabilities } = viewState;
-
-  const container = document.createElement('div');
-
-  const title = document.createElement('h2');
-  title.textContent = `Administrace zkouškového termínu: ${exam.name ?? exam.id}`;
-  container.appendChild(title);
-
   const { canUpdateCapacity, canUpdate, canCancel, canDelete, canBackToList } = capabilities;
   const { onUpdateCapacity, onUpdate, onCancel, onDelete, onBackToList } = handlers;
 
-  /**
-   * Zpět na seznam
-   */
 
-  if (canBackToList && onBackToList) {
-    const btn = document.createElement('button');
-    btn.textContent = 'Zpět na seznam';
-    btn.addEventListener('click', onBackToList);
-    container.appendChild(btn);
-  }
+  const root = createDiv();
+  root.appendChild(canGoBack(canBackToList, onBackToList));
+  const container = createDiv('text-center w-25');
+  container.appendChild(createTitle(1, `Administration of: ${exam.name ?? exam.id}`));
 
-  if (!exam) {
-    const msg = document.createElement('p');
-    msg.textContent = 'Termín nebyl nalezen';
-    container.appendChild(msg);
+  if (!exam)
+  {
+    container.appendChild(createText('Term was not found'));
     return container;
   }
 
-  /*
-   * aktualizace kapacity
-   */
-  let capacityInput = null;
+  if (canUpdateCapacity && onUpdateCapacity)
+  {
+    let capacityInput = createInput('', {
+          type: 'number',
+          value: exam.capacity,
+          min: 0,
+          name: 'examCapacity',
+          id: 'examCapacityInput',
+        }
+    );
+    const formCapacity = createDiv('', [
+          capacityInput,
+          submitButton('Adjust capacity', () => onUpdateCapacity(Number(document.getElementById('examCapacityInput').value)))
+        ]
+    );
 
-  if (canUpdateCapacity && onUpdateCapacity) {
-    capacityInput = document.createElement('input');
-    capacityInput.type = 'number';
-    capacityInput.value = exam.capacity;
-    capacityInput.min = '0';
-
-    const btn = document.createElement('button');
-    btn.textContent = 'Upravit kapacitu';
-    btn.addEventListener('click', () => onUpdateCapacity(Number(capacityInput.value)));
-
-    container.appendChild(capacityInput);
-    container.appendChild(btn);
+    container.appendChild(formCapacity);
   }
 
-  /**
-   * editace dalších údajů
-   */
-  if (canUpdate && onUpdate) {
-    const nameInput = document.createElement('input');
-    nameInput.type = 'text';
-    nameInput.value = exam.name ?? '';
+  if (canUpdate && onUpdate)
+  {
+    let nameInput = createInput('', {
+          type: 'text',
+          value: exam.name ?? '',
+          name: 'examName',
+          id: 'examNameInput',
+        }
+    );
+    let dateInput = createInput('', {
+          type: 'datetime-local',
+          value: exam.date ?? '',
+          name: 'examDate',
+          id: 'examDateInput',
+        }
+    );
 
-    const dateInput = document.createElement('input');
-    dateInput.type = 'datetime-local';
-    dateInput.value = exam.date ?? '';
-
-    const btn = document.createElement('button');
-    btn.textContent = 'Uložit';
-    btn.addEventListener('click', () => onUpdate({ name: nameInput.value, date: dateInput.value }));
-
-    container.appendChild(nameInput);
-    container.appendChild(dateInput);
-    container.appendChild(btn);
+    const formData = createDiv('', [
+          nameInput,
+          dateInput,
+          submitButton('Save', () => onUpdate({
+                name: document.getElementById('examNameInput').value,
+                date: document.getElementById('examDateInput').value
+              }
+            )
+          )
+        ]
+    );
+    container.appendChild(formData);
   }
 
   /**
@@ -81,15 +83,12 @@ export function ExamTermAdministrationView({ viewState, handlers }) {
     container.appendChild(btn);
   }
 
-  /**
-   * Delete
-   */
-  if (canDelete && onDelete) {
-    const btn = document.createElement('button');
-    btn.textContent = 'Smazat';
-    btn.addEventListener('click', onDelete);
-    container.appendChild(btn);
+  if (canDelete && onDelete)
+  {
+      container.appendChild(addActionButton(onDelete, 'Delete', 'button--danger'));
   }
 
-  return container;
+
+  root.appendChild(container);
+  return root;
 }

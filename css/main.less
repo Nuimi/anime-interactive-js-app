@@ -52,6 +52,7 @@
   --scrollbar-track-border: rgba(255,255,255,.2);
   --scrollbar-thumb: var(--primary);
 }
+
 html {
   font-family: "inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.2;
@@ -64,7 +65,6 @@ body {
   background: var(--color-bg);
 }
 
-
 .text-center{
   text-align: center;
 }
@@ -74,7 +74,15 @@ body {
 }
 
 .mb-15{
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
+}
+
+.mt-15{
+  margin-top: 15px !important;
+}
+
+.w-25{
+  width: 25vw;
 }
 
 .cards {
@@ -85,6 +93,7 @@ body {
   gap:36px;
   flex-wrap:wrap;
 }
+
 .card {
   border:1px solid var(--border);
   background-color: var(--surface);
@@ -93,7 +102,7 @@ body {
 }
 
 .card__title {
-  margin:0 17px 15px;
+  margin:0 17px 5px;
   overflow:hidden;
   text-align:center;
 }
@@ -136,10 +145,12 @@ body {
   background: #ffcf33;
   font-family: Arial, sans-serif;
 }
+
 .card__text.rating::before {
   content: "★";
   color: #d48f00;
 }
+
 .button {
   height:40px;
   font-size:24px;
@@ -149,10 +160,12 @@ body {
   margin:0 10px 9px;
   cursor:pointer;
 }
+
 .button--primary{
   background-color: var(--primary);
   color:var(--white);
 }
+
 .button--primary:hover{
   border:1px solid var(--primary);
   background-color: var(--surface);
@@ -163,20 +176,34 @@ body {
   background-color: var(--danger);
   color:var(--white);
 }
+
 .button--danger:hover{
   border:1px solid var(--danger);
   background-color: var(--surface);
   color: var(--danger);
 }
-
 .button--success{
   background-color: var(--success);
   color:var(--white);
 }
+
 .button--success:hover{
   border:1px solid var(--success);
   background-color: var(--surface);
   color: var(--success);
+}
+
+input[type=text],
+input[type=number],
+input[type=datetime-local],
+input[type=date] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px){

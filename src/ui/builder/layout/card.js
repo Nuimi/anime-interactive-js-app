@@ -3,14 +3,15 @@ import { createText } from "../components/text.js";
 import { createDiv } from "../components/div.js";
 import { createArticle } from "../components/article.js";
 
-export function createCard({ title, description, description2, button})
+export function createCard({ title, date, state, signed, button})
 {
     const titleElement = createTitle(2, title);
-    const textElement1 = createText( description);
-    const textElement2 = createText( description2);
+    const dateElement = createText( date);
+    const stateElement = createText( state);
+    const signedElement = createText( signed);
 
     const cardTitle = createDiv('card__title', [titleElement]);
-    const cardText = createDiv('card__text', [textElement1, textElement2]);
+    const cardText = createDiv('card__text', [dateElement, stateElement, signedElement]);
 
     return createArticle( "card" , [cardTitle, cardText, button]  );
 }
