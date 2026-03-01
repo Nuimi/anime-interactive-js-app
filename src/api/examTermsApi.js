@@ -536,6 +536,73 @@ export async function unregisterFromExam(examId, userId, token) {
   };
 }
 
+// má vracet { status, reason} nebo { result, registration, exam }
+// status = SUCCESS | REJECTED
+export async function unregisterStudentFromExam(examId, studentId, userId, token)
+{
+  await delay();
+
+  // existuje token?
+  if (!token)
+  {
+    return {
+      status: 'REJECTED',
+      reason: 'Uživatel není přihlášený',
+    };
+  }
+
+  // existuje uživatel podle tokenu?
+  const user = users.find((u) => u.token === token);
+  if (!user)
+  {
+    return {
+      status: 'REJECTED',
+      reason: 'Neplatný token',
+    };
+  }
+
+  // má uživatel oprávnění?
+  if (user.role !== 'TEACHER')
+  {
+    return {
+      status: 'REJECTED',
+      reason: 'Uživatel nemá oprávnění',
+    };
+  }
+
+  // doménová logika
+  const exam = exams.find((e) => e.id === examId);
+  if (!exam)
+  {
+    return {
+      status: 'REJECTED',
+      reason: 'Termín neexistuje',
+    };
+  }
+
+  // existuje registrace?
+  const registration = registrations.find(
+    (r) => r.userId === studentId && r.examId === examId && r.status === 'REGISTERED',
+  );
+
+  if (!registration)
+  {
+    return {
+      status: 'REJECTED',
+      reason: 'Registrace neexistuje',
+    };
+  }
+
+  registration.status = 'CANCELED';
+  exam.registeredCount -= 1;
+
+  return {
+    status: 'SUCCESS',
+    registration: structuredClone(registration),
+    exam: structuredClone(exam),
+  };
+}
+
 // má vracet { status, reason} nebo { status, exam}
 // status = SUCCESS | REJECTED
 export async function updateExamCapacity(examId, capacity, token) {

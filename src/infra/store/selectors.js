@@ -11,6 +11,12 @@ export function selectExamById(state) {
   return state.exams.find((e) => e.id === examId) ?? null;
 }
 
+export function selectRegisteredForExam(state) {
+  const examId = state.ui.selectedExamId;
+  if (!examId) return null;
+  return state.registrations.filter(e => e.examId === examId) ?? null;
+}
+
 // state.ui.mode = pojmenované navigační kontexty
 // EXAM_TERM_ADMINISTRATION .. administrační kontext - spravuji termín: edit, publish, cancel
 // EXAM_TERM_DETAIL .. : detailový kontext - prohlížím si jeden : view detail
@@ -145,6 +151,13 @@ export function canUnregister(state) {
   return hasRegistered;
 }
 
+export function canUnregisterStudent(state) {
+  const { role, userId } = state.auth;
+  if (role !== 'TEACHER') return false;
+  if (!userId) return false;
+  return selectRegisteredForExam(state);
+}
+
 /* ****************************************** */
 /*
  * vybírání pohledů
@@ -167,10 +180,10 @@ export function selectExamTermListView(state) {
 }
 
 export function selectExamTermDetailView(state) {
-  const exam = selectExamById(state);
   return {
     type: 'EXAM_TERM_DETAIL',
-    exam,
+    exam: selectExamById(state),
+    registered: selectRegisteredForExam(state),
     capabilities: {
       // navigační možnosti
       canBackToList: true,
@@ -178,6 +191,7 @@ export function selectExamTermDetailView(state) {
       // doménové možnosti
       canRegister: canRegister(state),
       canUnregister: canUnregister(state),
+      canUnregisterStudent: canUnregisterStudent(state),
       canPublish: canPublish(state),
       canUnpublish: canUnpublish(state),
       canCancel: canCancel(state),

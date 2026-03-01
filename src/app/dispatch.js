@@ -14,6 +14,7 @@ import { updateExamCapacity } from './actions/updateExamCapacity.js';
 import { updateExamTerm } from './actions/updateExamTerm.js';
 import { cancelExamTerm } from './actions/cancelExamTerm.js';
 import { deleteExamTerm } from './actions/deleteExamTerm.js';
+import { unregisterStudentFromExam } from "./actions/unregisterStudentFromExam.js";
 
 import { registerForExam } from './actions/registerForExam.js';
 import { unregisterFromExam } from './actions/unregisterFromExam.js';
@@ -79,6 +80,9 @@ export function createDispatcher(store, api) {
 
       case 'UNREGISTER_FROM_EXAM':
         return unregisterFromExam({ store, api, payload });
+
+      case CONST.UNREGISTER_STUDENT:
+        return unregisterStudentFromExam({ store, api, payload });
 
       default:
         console.warn(`Unknown action type: ${type}`);

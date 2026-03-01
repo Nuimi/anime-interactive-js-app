@@ -109,6 +109,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   const {
     canBackToList,
     canEnterAdministration,
+    canUnregisterStudent,
     canRegister,
     canUnregister,
     canPublish,
@@ -138,6 +139,19 @@ export function examTermDetailHandlers(dispatch, viewState) {
       dispatch({
         type: 'ENTER_EXAM_TERM_ADMINISTRATION',
         payload: { examId },
+      });
+  }
+
+  // canUnregisterStudent: canUnregisterStudent(state)
+  if (canUnregisterStudent)
+  {
+    handlers.onUnregisterStudent = (studentId) =>
+      dispatch({
+        type: CONST.UNREGISTER_STUDENT,
+        payload: {
+            examId,
+            studentId
+        },
       });
   }
 

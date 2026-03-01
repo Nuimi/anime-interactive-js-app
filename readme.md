@@ -129,7 +129,7 @@ tests/
 Například:
 
 ```
-tests/stateTests.mjs
+tests/runAllTests.mjs
 ```
 
 ---
@@ -142,7 +142,7 @@ tests/stateTests.mjs
 2. Spusťte konkrétní test:
 
 ```bash
-node tests/stateTests.mjs
+node tests/runAllTests.mjs
 ```
 
 ---
