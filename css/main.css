@@ -156,6 +156,76 @@ body {
   background-color: var(--surface);
   color: var(--success);
 }
+a:hover {
+  text-decoration: none;
+}
+.notification {
+  z-index: 100;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.alert > .start-icon {
+  margin-right: 0;
+  min-width: 20px;
+  text-align: center;
+}
+.alert > .start-icon {
+  margin-right: 5px;
+}
+.alert-simple {
+  padding: 15px;
+  margin: 15px 0;
+  animation: fadeSlideOut 5s forwards;
+}
+.alert-simple.alert-info {
+  border: 1px solid rgba(6, 44, 241, 0.46);
+  background-color: rgba(7, 73, 149, 0.12156863);
+  box-shadow: 0px 0px 2px #0396ff;
+  color: #0396ff;
+  text-shadow: 2px 1px #00040a;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.alert-simple.alert-danger {
+  border: 1px solid rgba(241, 6, 6, 0.81);
+  background-color: rgba(220, 17, 1, 0.16);
+  box-shadow: 0px 0px 2px #ff0303;
+  color: #ff0303;
+  text-shadow: 2px 1px #00040a;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.alert-info:hover {
+  background-color: rgba(7, 73, 149, 0.35);
+  transition: 0.5s;
+}
+.alert-danger:hover {
+  background-color: rgba(220, 17, 1, 0.33);
+  transition: 0.5s;
+}
+.danger {
+  font-size: 18px;
+  color: #ff0303;
+  text-shadow: none;
+}
+@keyframes fadeSlideOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+    visibility: hidden;
+  }
+}
 input[type=text],
 input[type=number],
 input[type=datetime-local],

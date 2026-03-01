@@ -1,4 +1,15 @@
 import * as CONST from '../../constants.js';
+import * as STATUS from '../../statuses.js';
+import {
+    CANCEL,
+    DELETE, EXAM_ADMIN,
+    EXAM_DETAIL,
+    PUBLISH,
+    REGISTER_F_EXAM,
+    UNPUBLISH,
+    UPDATE_CAPACITY,
+    UPDATE_TERM
+} from "../../constants.js";
 
 /*
  ** viewState má tvar
@@ -29,13 +40,13 @@ export function createHandlers(dispatch, viewState) {
     case CONST.EXAM_LIST:
       return examTermListHandlers(dispatch, viewState);
 
-    case 'EXAM_TERM_DETAIL':
+    case CONST.EXAM_DETAIL:
       return examTermDetailHandlers(dispatch, viewState);
 
-    case 'EXAM_TERM_ADMINISTRATION':
+    case CONST.EXAM_ADMIN:
       return examTermAdministrationHandlers(dispatch, viewState);
 
-    case 'ERROR':
+    case STATUS.ERR:
       return errorHandlers(dispatch);
 
     default:
@@ -64,7 +75,7 @@ export function examTermListHandlers(dispatch, viewState) {
   if (canEnterDetail) {
     handlers.onEnterDetail = (examId) =>
       dispatch({
-        type: 'ENTER_EXAM_TERM_DETAIL',
+        type: CONST.ENTER_DETAIL,
         payload: { examId },
       });
   }
@@ -72,7 +83,7 @@ export function examTermListHandlers(dispatch, viewState) {
   if (canEnterAdministration) {
     handlers.onEnterAdministration = (examId) =>
       dispatch({
-        type: 'ENTER_EXAM_TERM_ADMINISTRATION',
+        type: CONST.ENTER_ADMIN,
         payload: { examId },
       });
   }
@@ -80,7 +91,7 @@ export function examTermListHandlers(dispatch, viewState) {
   if (canCreateExam) {
     handlers.onCreateExamTerm = (data) =>
       dispatch({
-        type: 'CREATE_EXAM_TERM',
+        type: CONST.ENTER_CREATE,
         payload: data,
       });
   }
@@ -137,7 +148,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canEnterAdministration) {
     handlers.onEnterAdministration = () =>
       dispatch({
-        type: 'ENTER_EXAM_TERM_ADMINISTRATION',
+        type: CONST.ENTER_ADMIN,
         payload: { examId },
       });
   }
@@ -164,7 +175,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canRegister) {
     handlers.onRegister = () =>
       dispatch({
-        type: 'REGISTER_FOR_EXAM_TERM',
+        type: CONST.REGISTER_F_EXAM,
         payload: { examId },
       });
   }
@@ -173,7 +184,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canUnregister) {
     handlers.onUnregister = () =>
       dispatch({
-        type: 'UNREGISTER_FROM_EXAM',
+        type: CONST.UNREGISTER_F_EXAM,
         payload: { examId },
       });
   }
@@ -182,7 +193,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canPublish) {
     handlers.onPublish = () =>
       dispatch({
-        type: 'PUBLISH_EXAM_TERM',
+        type: CONST.PUBLISH,
         payload: { examId },
       });
   }
@@ -191,7 +202,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canUnpublish) {
     handlers.onUnpublish = () =>
       dispatch({
-        type: 'UNPUBLISH_EXAM_TERM',
+        type: CONST.UNPUBLISH,
         payload: { examId },
       });
   }
@@ -200,7 +211,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canCancel) {
     handlers.onCancel = () =>
       dispatch({
-        type: 'CANCEL_EXAM_TERM',
+        type: CONST.CANCEL,
         payload: { examId },
       });
   }
@@ -209,7 +220,7 @@ export function examTermDetailHandlers(dispatch, viewState) {
   if (canDelete) {
     handlers.onDelete = () =>
       dispatch({
-        type: 'DELETE_EXAM_TERM',
+        type: CONST.DELETE,
         payload: { examId },
       });
   }
@@ -256,7 +267,7 @@ export function examTermAdministrationHandlers(dispatch, viewState) {
   if (canDelete) {
     handlers.onDelete = () =>
       dispatch({
-        type: 'DELETE_EXAM_TERM',
+        type: CONST.DELETE,
         payload: { examId },
       });
   }
@@ -265,7 +276,7 @@ export function examTermAdministrationHandlers(dispatch, viewState) {
   if (canCancel) {
     handlers.onCancel = () =>
       dispatch({
-        type: 'CANCEL_EXAM_TERM',
+        type: CONST.CANCEL,
         payload: { examId },
       });
   }
@@ -274,7 +285,7 @@ export function examTermAdministrationHandlers(dispatch, viewState) {
   if (canUpdateCapacity) {
     handlers.onUpdateCapacity = (capacity) =>
       dispatch({
-        type: 'UPDATE_EXAM_CAPACITY',
+        type: CONST.UPDATE_CAPACITY,
         payload: { examId, capacity },
       });
   }
@@ -283,7 +294,7 @@ export function examTermAdministrationHandlers(dispatch, viewState) {
   if (canUpdate) {
     handlers.onUpdate = (data) =>
       dispatch({
-        type: 'UPDATE_EXAM_TERM',
+        type: CONST.UPDATE_TERM,
         payload: { examId, ...data },
       });
   }

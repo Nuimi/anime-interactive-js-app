@@ -181,7 +181,7 @@ export function selectExamTermListView(state) {
 
 export function selectExamTermDetailView(state) {
   return {
-    type: 'EXAM_TERM_DETAIL',
+    type: CONST.EXAM_DETAIL,
     exam: selectExamById(state),
     registered: selectRegisteredForExam(state),
     capabilities: {
@@ -212,7 +212,7 @@ export function selectExamTermAdministrationView(state) {
   }
 
   return {
-    type: 'EXAM_TERM_ADMINISTRATION',
+    type: CONST.EXAM_ADMIN,
     exam,
     capabilities: {
       // navigační možnosti
@@ -270,9 +270,9 @@ export function selectViewState(state) {
   switch (mode) {
     case CONST.EXAM_LIST:
       return selectExamTermListView(state);
-    case 'EXAM_TERM_DETAIL':
+    case CONST.EXAM_DETAIL:
       return selectExamTermDetailView(state);
-    case 'EXAM_TERM_ADMINISTRATION':
+    case CONST.EXAM_ADMIN:
       return selectExamTermAdministrationView(state);
     default:
       return { type: 'ERROR', message: `Unknown ui mode: ${mode}` };

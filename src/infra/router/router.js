@@ -1,4 +1,5 @@
 import * as CONST from '../../constants.js';
+import * as STATUS from '../../statuses.js';
 
 // --------------------------------------------------
 // Router pracuje s LOGICKOU CESTOU aplikace,
@@ -31,7 +32,7 @@ export function parseUrl(path) {
   // #/exam-terms/:id
   if (parts.length === 2 && parts[0] === "exam-terms") {
     return {
-      context: "EXAM_TERM_DETAIL",
+      context: CONST.EXAM_DETAIL,
       examId: parts[1],
     };
   }
@@ -39,12 +40,12 @@ export function parseUrl(path) {
   // #/exam-terms/:id/edit
   if (parts.length === 3 && parts[0] === "exam-terms" && parts[2] === "edit") {
     return {
-      context: "EXAM_TERM_ADMINISTRATION",
+      context: CONST.EXAM_ADMIN,
       examId: parts[1],
     };
   }
 
-  return { context: "UNKNOWN" };
+  return { context: STATUS.UNK };
 }
 
 // route -> navigační akce
@@ -52,17 +53,17 @@ export function routeToAction(route) {
   switch (route.context) {
     case CONST.EXAM_LIST:
       return { type: CONST.ENTER_LIST };
-    case "EXAM_TERM_DETAIL":
+    case CONST.EXAM_DETAIL:
       return {
-        type: "ENTER_EXAM_TERM_DETAIL",
+        type: CONST.ENTER_DETAIL,
         payload: { examId: route.examId },
       };
-    case "EXAM_TERM_ADMINISTRATION":
+    case CONST.EXAM_ADMIN:
       return {
-        type: "ENTER_EXAM_TERM_ADMINISTRATION",
+        type: CONST.ENTER_ADMIN,
         payload: { examId: route.examId },
       };
-    case "UNKNOWN":
+    case STATUS.UNK:
       return { type: CONST.ENTER_LIST };
   }
 }

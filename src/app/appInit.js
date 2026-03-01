@@ -1,4 +1,5 @@
 import { urlToAction } from '../infra/router/router.js';
+import * as STATUS from '../statuses.js';
 
 // první akce aplikace
 export async function appInit({ store, api, dispatch }) {
@@ -7,7 +8,7 @@ export async function appInit({ store, api, dispatch }) {
 
   store.setState((state) => ({
     ...state,
-    ui: { ...state.ui, status: 'LOADING', errorMessage: null },
+    ui: { ...state.ui, status: STATUS.LOAD, errorMessage: null },
   }));
 
   const whoResult = await api.whoAmI(token);
@@ -18,7 +19,7 @@ export async function appInit({ store, api, dispatch }) {
     token: null,
   };
 
-  if (whoResult.status === 'SUCCESS') {
+  if (whoResult.status === STATUS.OK) {
     auth = {
       role: whoResult.role,
       userId: whoResult.userId,
@@ -29,11 +30,11 @@ export async function appInit({ store, api, dispatch }) {
   // načtení doménových dat
   const dataResult = await api.getExams(token);
 
-  if (dataResult.status !== 'SUCCESS') {
+  if (dataResult.status !== STATUS.OK) {
     store.setState((state) => ({
       ...state,
       auth,
-      ui: { ...state.ui, status: 'ERROR', errorMessage: 'Nepodařilo se načíst data' },
+      ui: { ...state.ui, status: STATUS.ERR, errorMessage: 'Nepodařilo se načíst data' },
     }));
     return;
   }
@@ -46,7 +47,7 @@ export async function appInit({ store, api, dispatch }) {
     auth,
     exams,
     registrations,
-    ui: { ...state.ui, status: 'READY', errorMessage: null },
+    ui: { ...state.ui, status: STATUS.RDY, errorMessage: null },
   }));
 
   // první navigace

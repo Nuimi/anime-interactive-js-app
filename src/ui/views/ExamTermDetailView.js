@@ -31,7 +31,7 @@ export function ExamTermDetailView({ viewState, handlers })
   registered.forEach((user) =>
       {
         let btn = '';
-        if (user.status === STATUS.U_REGISTERED )
+        if (user.status === STATUS.REG )
         {
           btn = addButton( canUnregisterStudent, onUnregisterStudent, () => onUnregisterStudent(user.userId), 'Unregister', 'button--danger')
         }

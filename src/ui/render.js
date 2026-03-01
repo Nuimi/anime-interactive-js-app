@@ -9,6 +9,9 @@ import { ExamTermListView } from './views/ExamTermListView.js';
 import { ExamTermDetailView } from './views/ExamTermDetailView.js';
 import { ExamTermAdministrationView } from './views/ExamTermAdministrationView.js';
 
+import { createSuccessNotification, createDangerNotification } from './builder/layout/notification.js';
+import { createSection } from './builder/components/section.js';
+
 import * as CONST from '../constants.js';
 
 /*
@@ -82,11 +85,10 @@ export function render(root, state, dispatch) {
 
   // notifikace (toast)
   const { notification } = state.ui;
-
+  let messages = createSection('notification');
   if (notification) {
-    const notificationElement = document.createElement('div');
-    notificationElement.textContent = notification.message;
-    notificationElement.classList.add('notification');
-    root.appendChild(notificationElement);
+    messages.appendChild(createSuccessNotification({ message: notification.message}));
   }
+
+  root.appendChild(messages);
 }

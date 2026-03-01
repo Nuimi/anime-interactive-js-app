@@ -44,41 +44,41 @@ export function createDispatcher(store, api) {
       case CONST.ENTER_LIST:
         return enterExamTermList({ store });
 
-      case 'ENTER_EXAM_TERM_DETAIL':
+      case CONST.ENTER_DETAIL:
         return enterExamTermDetail({ store, payload });
 
-      case 'ENTER_EXAM_TERM_ADMINISTRATION':
+      case CONST.ENTER_ADMIN:
         return enterExamTermAdministration({ store, payload });
 
       // doménové akce
 
-      case 'CREATE_EXAM_TERM':
+      case CONST.CREATE:
         return createExamTerm({ store, api, payload });
 
-      case 'PUBLISH_EXAM_TERM':
+      case CONST.PUBLISH:
         return publishExamTerm({ store, api, payload });
 
-      case 'UNPUBLISH_EXAM_TERM':
+      case CONST.UNPUBLISH:
         return unpublishExamTerm({ store, api, payload });
 
-      case 'UPDATE_EXAM_CAPACITY':
+      case CONST.UPDATE_CAPACITY:
         // předáváme payload: { examId, capacity }
         return updateExamCapacity({ store, api, payload });
 
-      case 'UPDATE_EXAM_TERM':
+      case CONST.UPDATE_TERM:
         // předáváme payload: { examId, data }
         return updateExamTerm({ store, api, payload });
 
-      case 'CANCEL_EXAM_TERM':
+      case CONST.CANCEL:
         return cancelExamTerm({ store, api, payload });
 
-      case 'DELETE_EXAM_TERM':
+      case CONST.DELETE:
         return deleteExamTerm({ store, api, payload });
 
-      case 'REGISTER_FOR_EXAM_TERM':
+      case CONST.REGISTER_F_EXAM:
         return registerForExam({ store, api, payload });
 
-      case 'UNREGISTER_FROM_EXAM':
+      case CONST.UNREGISTER_F_EXAM:
         return unregisterFromExam({ store, api, payload });
 
       case CONST.UNREGISTER_STUDENT:
