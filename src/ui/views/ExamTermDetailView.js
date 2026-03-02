@@ -1,7 +1,7 @@
 import { createText } from "../builder/components/text.js";
 import { createTitle } from "../builder/components/title.js";
 import { createDiv } from "../builder/components/div.js";
-import {canGoBack, addActionButton, addButton} from "./common.js";
+import {canGoBack, addActionButton, addButton} from "../builder/components/button.js";
 import {createCard} from "../builder/layout/cardSmall.js";
 import {createSection} from "../builder/components/section.js";
 import * as STATUS from "../../statuses.js";

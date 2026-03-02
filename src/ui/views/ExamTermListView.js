@@ -1,8 +1,7 @@
 import { createSection } from "../builder/components/section.js";
 import { createTitle } from "../builder/components/title.js";
-import { createButton } from "../builder/components/button.js";
+import { createButton, addButton } from "../builder/components/button.js";
 import { createCard } from "../builder/layout/card.js";
-import { addButton } from "./common.js";
 
 export function ExamTermListView({ viewState, handlers })
 {

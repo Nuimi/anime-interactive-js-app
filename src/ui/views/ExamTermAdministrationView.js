@@ -1,5 +1,5 @@
 import {createDiv} from "../builder/components/div.js";
-import {canGoBack, submitButton, addActionButton} from "./common.js";
+import {canGoBack, submitButton, addActionButton} from "../builder/components/button.js";
 import { createTitle } from "../builder/components/title.js";
 import { createText } from "../builder/components/text.js";
 import { createInput } from "../builder/components/input.js";
