@@ -61,7 +61,7 @@ export function render(root, state, dispatch) {
       view = ExamTermListView({ viewState, handlers });
       break;
 
-    case 'EXAM_TERM_DETAIL':
+    case CONST.EXAM_DETAIL:
       if (!viewState.exam) {
         view = ErrorView({ message: 'Zkouškový termín nebyl nalezen.' });
       } else {
@@ -69,7 +69,7 @@ export function render(root, state, dispatch) {
       }
       break;
 
-    case 'EXAM_TERM_ADMINISTRATION':
+    case CONST.EXAM_ADMIN:
       if (!viewState.exam) {
         view = ErrorView({ message: 'Zkouškový termín nebyl nalezen.' });
       } else {
