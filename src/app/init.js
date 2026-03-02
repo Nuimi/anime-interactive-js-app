@@ -4,12 +4,13 @@ import { createInitialState } from './state.js';
 import { createStore } from '../infra/store/createStore.js';
 import { createDispatcher } from './dispatch.js';
 import { render } from '../ui/render.js';
-import * as examTermsApi from '../api/examTermsApi.js';
+import { createApi } from '../api/mockApi.js';
 import { urlToAction } from '../infra/router/router.js';
 
 // 1. inicializace infrastruktury aplikace
+const api = createApi(); // NEW
 const store = createStore(createInitialState());
-const dispatch = createDispatcher(store, examTermsApi);
+const dispatch = createDispatcher(store, api);
 
 // 2. napojení výstupu aplikace
 const root = document.getElementById('app');

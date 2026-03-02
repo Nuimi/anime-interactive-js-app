@@ -1,7 +1,7 @@
 export async function updateExamCapacity({ store, api, payload }) {
   const token = store.getState().auth.token;
   const { examId, capacity } = payload;
-  const { status, reason, exam } = await api.updateExamCapacity(
+  const { status, reason, exam } = await api.examTerms.updateExamCapacity(
     examId,
     capacity,
     token,

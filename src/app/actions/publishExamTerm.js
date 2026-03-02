@@ -2,7 +2,7 @@ export async function publishExamTerm({ store, api, payload }) {
   const token = store.getState().auth.token;
   const { examId } = payload;
 
-  const { status, reason, exam } = await api.publishExamTerm(examId, token);
+  const { status, reason, exam } = await api.examTerms.publishExamTerm(examId, token);
 
   store.setState((state) => {
     let { exams } = state;

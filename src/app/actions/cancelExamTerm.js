@@ -2,7 +2,7 @@ export async function cancelExamTerm({ store, api, payload }) {
   const token = store.getState().auth.token;
   const { examId } = payload;
 
-  const { status, reason, exam } = await api.cancelExamTerm(examId, token);
+  const { status, reason, exam } = await api.examTerms.cancelExamTerm(examId, token);
 
   store.setState((state) => {
     let { exams } = state;

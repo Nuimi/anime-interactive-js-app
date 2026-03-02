@@ -4,7 +4,7 @@ export async function unregisterStudentFromExam({ store, api, payload })
   const { examId, studentId } = payload;
   const userId = store.getState().userId;
 
-  const { status, reason, registration, exam } = await api.unregisterStudentFromExam(examId, studentId, userId, token);
+  const { status, reason, registration, exam } = await api.examTerms.unregisterStudentFromExam(examId, studentId, userId, token);
 
   store.setState((state) => {
     let { exams, registrations } = state;

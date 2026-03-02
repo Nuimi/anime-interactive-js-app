@@ -4,7 +4,7 @@ export async function registerForExam({ store, api, payload }) {
 
   const userId = store.getState().auth.userId;
 
-  const { status, reason, registration, exam } = await api.registerForExam(examId, userId, token);
+  const { status, reason, registration, exam } = await api.examTerms.registerForExam(examId, userId, token);
 
   store.setState((state) => {
     let { exams, registrations } = state;

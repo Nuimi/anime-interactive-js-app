@@ -11,7 +11,7 @@ export async function appInit({ store, api, dispatch }) {
     ui: { ...state.ui, status: STATUS.LOAD, errorMessage: null },
   }));
 
-  const whoResult = await api.whoAmI(token);
+  const whoResult = await api.auth.whoAmI(token);
 
   let auth = {
     role: 'ANONYMOUS',
@@ -28,7 +28,7 @@ export async function appInit({ store, api, dispatch }) {
   }
 
   // načtení doménových dat
-  const dataResult = await api.getExams(token);
+  const dataResult = await api.examTerms.getExams(token);
 
   if (dataResult.status !== STATUS.OK) {
     store.setState((state) => ({

@@ -1,7 +1,7 @@
 export async function createExamTerm({ store, api, payload }) {
   const token = store.getState().auth.token;
 
-  const { status, reason, exam } = await api.createExamTerm(payload, token);
+  const { status, reason, exam } = await api.examTerms.createExamTerm(payload, token);
 
   store.setState((state) => {
     let { exams } = state;

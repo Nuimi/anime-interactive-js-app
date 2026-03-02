@@ -4,7 +4,7 @@ export async function deleteExamTerm({ store, api, payload }) {
   const token = store.getState().auth.token;
   const { examId } = payload;
 
-  const { status, reason, exam } = await api.deleteExamTerm(examId, token);
+  const { status, reason, exam } = await api.examTerms.deleteExamTerm(examId, token);
 
   store.setState((state) => {
     let { exams } = state;
